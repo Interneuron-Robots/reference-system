@@ -19,17 +19,20 @@ endif()
 if(${INTERNEURON})
   add_compile_options(-DINTERNEURON)
   find_package(interneuron_lib REQUIRED)
-  find_package(interneuron_msgs REQUIRED)
+  # find_package(interneuron_msgs REQUIRED)
 endif()
-
+if(${PRINT_DEBUG})
+  add_compile_options(-DPRINT_DEBUG)
+endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
 # Add header-only library
 add_library(${PROJECT_NAME} INTERFACE)
-#ament_target_dependencies(${PROJECT_NAME} "interneuron_lib")
+
 if(${INTERNEURON})
-target_link_libraries(${PROJECT_NAME} INTERFACE "interneuron_lib")
+ament_target_dependencies(${PROJECT_NAME} INTERFACE "interneuron_lib")
+  #target_link_libraries(${PROJECT_NAME} INTERFACE interneuron_lib)
 endif()
 
 target_include_directories(${PROJECT_NAME} INTERFACE
@@ -45,37 +48,31 @@ if(${BUILD_TESTING})
 
   # unit tests
   ament_add_gtest(test_sample_management
-      test/test_sample_management.cpp)
+    test/test_sample_management.cpp)
   target_link_libraries(test_sample_management ${PROJECT_NAME})
   ament_target_dependencies(test_sample_management reference_interfaces)
-if(${INTERNEURON})
-  ament_target_dependencies(test_sample_management interneuron_msgs)
-endif()
 
   ament_add_gtest(test_number_cruncher
-      test/test_number_cruncher.cpp)
+    test/test_number_cruncher.cpp)
   target_link_libraries(test_number_cruncher ${PROJECT_NAME})
 
   # integration tests
   if(${FRAMEWORK} STREQUAL ros)
     ament_add_gtest(test_reference_system_rclcpp
-        test/test_fixtures.hpp
-        test/test_reference_system_rclcpp.cpp)
+      test/test_fixtures.hpp
+      test/test_reference_system_rclcpp.cpp)
     target_link_libraries(test_reference_system_rclcpp ${PROJECT_NAME})
     ament_target_dependencies(test_reference_system_rclcpp reference_interfaces rclcpp)
-  if(${INTERNEURON})
-  ament_target_dependencies(test_sample_management interneuron_lib)
-  endif()
   endif()
 endif()
 
 # Install
 install(TARGETS ${PROJECT_NAME}
-        EXPORT "export_${PROJECT_NAME}"
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION include
+  EXPORT "export_${PROJECT_NAME}"
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION include
 )
 
 ament_python_install_package(reference_system_py)

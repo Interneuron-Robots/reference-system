@@ -9,21 +9,26 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
-
+if(${INTERNEURON})
+  add_compile_options(-DINTERNEURON)
+endif()
+if(${PRINT_DEBUG})
+  add_compile_options(-DPRINT_DEBUG)
+endif()
 find_package(ament_cmake_auto REQUIRED)
-find_package(interneuron_msgs REQUIRED)
+#find_package(interneuron_lib REQUIRED)
 ament_auto_find_build_dependencies()
 
 # add additional messages here
 set(msg_files
   "msg/TransmissionStats.idl"
   "msg/Message4kb.idl"
-  "msg/MessageInterneuron.idl"
+  #"msg/MessageInterneuron.idl"
 )
 
 # add additional message dependencies here
 set(msg_dependencies
-  "interneuron_msgs"
+  #"interneuron_lib"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
