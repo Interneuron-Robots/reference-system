@@ -4,7 +4,7 @@
                 {
                         "label": "build_reference",
                         "type": "shell",
-                        "command": "cd /home/sauron/Interneuron-Robots/reference-system && source /home/sauron/ros2_humble/install/setup.bash && source /home/sauron/Interneuron-Robots/interneuron/install/setup.bash && colcon build --packages-up-to autoware_reference_system --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True",
+                        "command": "cd /home/sauron/Interneuron-Robots/reference-system && source /home/sauron/ros2_humble/install/setup.bash && source /home/sauron/Interneuron-Robots/interneuron/install/setup.bash && colcon build --packages-up-to autoware_reference_system --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
                         "group": "build",
                         "dependsOn":["build_ros2"],
                         "presentation": {
