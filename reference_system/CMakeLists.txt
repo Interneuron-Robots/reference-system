@@ -19,7 +19,6 @@ endif()
 if(${INTERNEURON})
   add_compile_options(-DINTERNEURON)
   find_package(interneuron_lib REQUIRED)
-  # find_package(interneuron_msgs REQUIRED)
 endif()
 if(${PRINT_DEBUG})
   add_compile_options(-DPRINT_DEBUG)
@@ -31,8 +30,8 @@ ament_auto_find_build_dependencies()
 add_library(${PROJECT_NAME} INTERFACE)
 
 if(${INTERNEURON})
-ament_target_dependencies(${PROJECT_NAME} INTERFACE "interneuron_lib")
-  #target_link_libraries(${PROJECT_NAME} INTERFACE interneuron_lib)
+#ament_target_dependencies(${PROJECT_NAME} INTERFACE "interneuron_lib")
+  target_link_libraries(${PROJECT_NAME} INTERFACE interneuron_lib)
 endif()
 
 target_include_directories(${PROJECT_NAME} INTERFACE
