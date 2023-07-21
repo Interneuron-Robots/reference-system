@@ -41,6 +41,21 @@ public:
       rclcpp::CallbackGroup::SharedPtr callback_group = this->create_callback_group(
         rclcpp::CallbackGroupType::MutuallyExclusive);
       options.callback_group = callback_group;
+      #ifdef INTERNEURON
+      connections_.emplace_back(
+        Connection{
+            this->create_publisher<message_t>(connection.output_topic, 1),
+            this->create_subscription<message_t>(
+              connection.input_topic, 1,
+              [this, id = index](const message_t::SharedPtr msg, const rclcpp::MessageInfo&msg_info) {
+                input_callback(msg, id, msg_info);
+              }),
+            callback_group,
+            connection.number_crunch_limit});
+      interneuron::TimePointManager::getInstance().add_middle_timepoint(connections_[index].subscription->get_key_tp()+"_sub",settings.connections[index].input_sensor_names);
+      connections_[index].start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(connections_[index].subscription->get_key_tp()+"_app",settings.connections[index].input_sensor_names);
+      connections_[index].end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(connections_[index].publisher->get_key_tp()+"_pub",settings.connections[index].output_sensor_names);
+      #else
       connections_.emplace_back(
         Connection{
             this->create_publisher<message_t>(connection.output_topic, 1),
@@ -51,6 +66,7 @@ public:
               }),
             callback_group,
             connection.number_crunch_limit});
+      #endif
     }
   }
   rclcpp::CallbackGroup::SharedPtr get_callback_group_of_subscription(
@@ -66,6 +82,39 @@ public:
   }
 
 private:
+#ifdef INTERNEURON
+void input_callback(
+    const message_t::SharedPtr input_message,
+    const uint64_t id, const rclcpp::MessageInfo&msg_info)
+  {
+        auto message_info = std::make_unique<rclcpp::MessageInfo>(msg_info);
+        //---update start tp
+        auto run_policy = connections_[id].start_tp_->update_reference_times(message_info->tp_infos_);
+        //---
+    uint64_t timestamp = now_as_int();
+    auto number_cruncher_result =
+      number_cruncher(connections_[id].number_crunch_limit);
+
+    auto output_message = message_t();
+    output_message.size = 0;
+    merge_history_into_sample(output_message, input_message);
+
+    uint32_t missed_samples = get_missed_samples_and_update_seq_nr(
+      input_message, connections_[id].input_sequence_number);
+
+    set_sample(
+      this->get_name(), connections_[id].sequence_number++,
+      missed_samples, timestamp, output_message);
+
+    // use result so that it is not optimizied away by some clever compiler
+    output_message.data[0] = number_cruncher_result;
+
+    //---update end tp
+    connections_[id].end_tp_->update_reference_times(message_info->tp_infos_);
+    //---
+    connections_[id].publisher->publish(std::move(output_message), std::move(message_info));
+  }
+#else
   void input_callback(
     const message_t::SharedPtr input_message,
     const uint64_t id)
@@ -89,7 +138,7 @@ private:
     output_message.get().data[0] = number_cruncher_result;
     connections_[id].publisher->publish(std::move(output_message));
   }
-
+#endif
 private:
   struct Connection
   {
@@ -99,6 +148,10 @@ private:
     uint64_t number_crunch_limit;
     uint32_t sequence_number = 0;
     uint32_t input_sequence_number = 0;
+    #ifdef INTERNEURON
+    std::shared_ptr<interneuron::MiddleTimePoint> start_tp_;
+    std::shared_ptr<interneuron::MiddleTimePoint> end_tp_;
+    #endif
   };
   std::vector<Connection> connections_;
 };

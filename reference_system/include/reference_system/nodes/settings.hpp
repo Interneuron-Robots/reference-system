@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sauron
  * @Date: 2023-04-06 14:23:58
- * @LastEditTime: 2023-07-19 23:22:48
+ * @LastEditTime: 2023-07-20 20:52:42
  * @LastEditors: Sauron
  */
 // Copyright 2021 Apex.AI, Inc.
@@ -24,12 +24,16 @@
 #include <chrono>
 #include <string>
 #include <vector>
+#ifdef INTERNEURON
+#include "interneuron_lib/time_point.hpp"
+#endif
 
 namespace nodes
 {
 
 #ifdef INTERNEURON
 bool USE_INTRA = true;
+
 #else
 bool USE_INTRA = false;
 #endif
@@ -56,6 +60,8 @@ struct FusionSettings
   std::vector<std::string> input_0_sensor_names;
   std::vector<std::string> input_1_sensor_names;
   std::vector<std::string> output_sensor_names;
+
+  interneuron::FusionPolicy fusion_policy = interneuron::FusionPolicy::ALL_AVAILABLE;
   #endif
 };
 
