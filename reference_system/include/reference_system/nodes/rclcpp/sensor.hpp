@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sauron
  * @Date: 2023-04-06 14:23:58
- * @LastEditTime: 2023-07-19 23:25:36
+ * @LastEditTime: 2023-07-26 14:41:03
  * @LastEditors: Sauron
  */
 // Copyright 2021 Apex.AI, Inc.
@@ -50,7 +50,7 @@ public:
       settings.cycle_time,
       [this] {timer_callback();});
       #ifdef INTERNEURON
-      source_tp_ = interneuron::TimePointManager::getInstance().add_source_timepoint(settings.topic_name,settings.cycle_time.count()*2,settings.cycle_time.count());
+      source_tp_ = interneuron::TimePointManager::getInstance().add_source_timepoint(settings.sensor_name,settings.cycle_time.count()*2,settings.cycle_time.count());
       #endif
   }
 

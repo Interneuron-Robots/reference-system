@@ -36,6 +36,7 @@ public:
   explicit Intersection(const IntersectionSettings & settings)
   : Node(settings.node_name,rclcpp::NodeOptions().use_intra_process_comms(nodes::USE_INTRA))
   {
+    int index = 0;
     for (auto & connection : settings.connections) {
       rclcpp::SubscriptionOptionsWithAllocator<std::allocator<void>> options;
       rclcpp::CallbackGroup::SharedPtr callback_group = this->create_callback_group(
@@ -61,12 +62,13 @@ public:
             this->create_publisher<message_t>(connection.output_topic, 1),
             this->create_subscription<message_t>(
               connection.input_topic, 1,
-              [this, id = connections_.size()](const message_t::SharedPtr msg) {
+              [this, id = index](const message_t::SharedPtr msg) {
                 input_callback(msg, id);
               }),
             callback_group,
             connection.number_crunch_limit});
       #endif
+      index++;
     }
   }
   rclcpp::CallbackGroup::SharedPtr get_callback_group_of_subscription(

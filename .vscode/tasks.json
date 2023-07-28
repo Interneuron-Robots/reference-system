@@ -18,7 +18,7 @@
                         "label": "build_ros2",
                         "type": "shell",
                         //"command": "source /home/sauron/Interneuron-Robots/interneuron/install/setup.bash && cd /home/sauron/ros2_humble && source /home/sauron/ros2_humble/install/setup.bash && colcon build --packages-up-to rclcpp --cmake-args -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
-                        "command": "cd /home/sauron/ros2_humble && colcon build --packages-select rclcpp --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
+                        "command": "cd /home/sauron/ros2_humble && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
                         "group": "build",
                         "dependsOn":["build_interneuron"],
                         "presentation": {

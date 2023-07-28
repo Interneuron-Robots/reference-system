@@ -37,7 +37,7 @@ public:
     subscription_ = this->create_subscription<message_t>(
       settings.input_topic, 10,
       [this](const message_t::SharedPtr msg,const rclcpp::MessageInfo&msg_info) {input_callback(msg,msg_info);});
-    interneuron::TimePointManager::getInstance().add_middle_timepoint(subscription_.get_key_tp()+"_sub",settings.sensor_names);
+    interneuron::TimePointManager::getInstance().add_middle_timepoint(subscription_->get_key_tp()+"_sub",settings.sensor_names);
     finish_tp_ = interneuron::TimePointManager::getInstance().add_sink_timepoint("sink",settings.sensor_names);
     #else
     subscription_ = this->create_subscription<message_t>(
@@ -51,7 +51,8 @@ private:
 std::shared_ptr<interneuron::SinkTimePoint> finish_tp_;
 void input_callback(const message_t::SharedPtr input_message, const rclcpp::MessageInfo&msg_info)
   {
-    sink_tp_->update_finish_times(msg_info.tp_infos_);
+    auto message_info = std::make_unique<rclcpp::MessageInfo>(msg_info);
+    finish_tp_->update_finish_times(message_info->tp_infos_);
     uint32_t missed_samples =
       get_missed_samples_and_update_seq_nr(input_message, sequence_number_);
     print_sample_path(this->get_name(), missed_samples, input_message);

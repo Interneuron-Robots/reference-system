@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: Sauron
+ * @Date: 2023-04-06 14:23:58
+ * @LastEditTime: 2023-07-26 14:28:44
+ * @LastEditors: Sauron
+ */
 // Copyright 2021 Apex.AI, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,9 +52,9 @@ public:
       settings.input_1, 1,
       [this](const message_t::SharedPtr msg, const rclcpp::MessageInfo&msg_info) {input_callback(1U, msg, msg_info);});
 
-interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[0]->get_key_tp()+"_sub",settings.input_0_sensor_names);
-interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[1]->get_key_tp()+"_sub",settings.input_1_sensor_names);
-      start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[0]->get_key_tp()+"_app",settings.output_sensor_names);//we only need one start timepoint, and we use the first subscriber's key, it's ok to use any unique string defined in settings
+interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[0].subscription->get_key_tp()+"_sub",settings.input_0_sensor_names);
+interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[1].subscription->get_key_tp()+"_sub",settings.input_1_sensor_names);
+      start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[0].subscription->get_key_tp()+"_app",settings.output_sensor_names);//we only need one start timepoint, and we use the first subscriber's key, it's ok to use any unique string defined in settings
       end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(publisher_->get_key_tp()+"_pub",settings.output_sensor_names);
     #else
     subscriptions_[0].subscription = this->create_subscription<message_t>(
@@ -62,8 +69,8 @@ interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_
 
 private:
 #ifdef INTERNEURON
-shared_ptr<interneuron::MiddleTimePoint> start_tp_;
-shared_ptr<interneuron::MiddleTimePoint> end_tp_;
+std::shared_ptr<interneuron::MiddleTimePoint> start_tp_;
+std::shared_ptr<interneuron::MiddleTimePoint> end_tp_;
 void input_callback(
     const uint64_t input_number,
     const message_t::SharedPtr input_message,
