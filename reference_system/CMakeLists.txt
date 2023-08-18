@@ -23,6 +23,10 @@ endif()
 if(${PRINT_DEBUG})
   add_compile_options(-DPRINT_DEBUG)
 endif()
+if(${RECORD_LOG})
+  add_compile_options(-DRECORD_LOG)
+endif()
+
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 

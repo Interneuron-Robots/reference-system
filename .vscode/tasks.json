@@ -5,7 +5,7 @@
                         "label": "build_reference",
                         "type": "shell",
                         //"command": "cd /home/sauron/Interneuron-Robots/reference-system && source /home/sauron/ros2_humble/install/setup.bash && source /home/sauron/Interneuron-Robots/interneuron/install/setup.bash && colcon build --packages-up-to autoware_reference_system --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
-                        "command": "cd /home/sauron/Interneuron-Robots/reference-system && source /home/sauron/ros2_humble/install/setup.bash && colcon build --packages-up-to autoware_reference_system --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
+                        "command": "cd /home/sauron/Interneuron-Robots/reference-system && source /home/sauron/ros2_humble/install/setup.bash && colcon build --packages-up-to autoware_reference_system --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=False",
                         "group": "build",
                         "dependsOn":["build_ros2"],
                         "presentation": {
@@ -18,7 +18,7 @@
                         "label": "build_ros2",
                         "type": "shell",
                         //"command": "source /home/sauron/Interneuron-Robots/interneuron/install/setup.bash && cd /home/sauron/ros2_humble && source /home/sauron/ros2_humble/install/setup.bash && colcon build --packages-up-to rclcpp --cmake-args -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
-                        "command": "cd /home/sauron/ros2_humble && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
+                        "command": "cd /home/sauron/ros2_humble && colcon build --packages-select rclcpp --cmake-args -DCMAKE_BUILD_TYPE=Debug -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=False",
                         "group": "build",
                         "dependsOn":["build_interneuron"],
                         "presentation": {
@@ -31,7 +31,7 @@
                         "label": "build_interneuron",
                         "type": "shell",
                         //"command": "cd /home/sauron/Interneuron-Robots/interneuron  && colcon build --packages-up-to interneuron_lib --cmake-args -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True",
-                        "command": "cd /home/sauron/Interneuron-Robots/interneuron/interneuron/interneuron_lib/build && cmake .. -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=True -DCMAKE_BUILD_TYPE=Debug && make && sudo make install",
+                        "command": "cd /home/sauron/Interneuron-Robots/interneuron/interneuron/interneuron_lib/build && cmake .. -DINTERNEURON=True -DPRINT_DEBUG=True -DRECORD_LOG=False -DCMAKE_BUILD_TYPE=Debug && make && sudo make install",
                         "group": "build",
                         "presentation": {
                                 "reveal": "always",

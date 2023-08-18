@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: Sauron
+ * @Date: 2023-04-06 14:23:58
+ * @LastEditTime: 2023-07-31 14:37:18
+ * @LastEditors: Sauron
+ */
 // Copyright 2021 Apex.AI, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +45,7 @@ public:
       settings.input_topic, 10,
       [this](const message_t::SharedPtr msg,const rclcpp::MessageInfo&msg_info) {input_callback(msg,msg_info);});
     interneuron::TimePointManager::getInstance().add_middle_timepoint(subscription_->get_key_tp()+"_sub",settings.sensor_names);
-    finish_tp_ = interneuron::TimePointManager::getInstance().add_sink_timepoint("sink",settings.sensor_names);
+    finish_tp_ = interneuron::TimePointManager::getInstance().add_sink_timepoint("sink"+settings.node_name,settings.sensor_names);
     #else
     subscription_ = this->create_subscription<message_t>(
       settings.input_topic, 10,

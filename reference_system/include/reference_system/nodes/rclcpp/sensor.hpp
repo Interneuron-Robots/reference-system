@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sauron
  * @Date: 2023-04-06 14:23:58
- * @LastEditTime: 2023-07-26 14:41:03
+ * @LastEditTime: 2023-08-16 22:58:02
  * @LastEditors: Sauron
  */
 // Copyright 2021 Apex.AI, Inc.
@@ -61,7 +61,9 @@ private:
     //loaned message is not supported in intra-communication
 auto message = message_t();
     message.size = 0;
-    auto message_info = std::make_unique<rclcpp::MessageInfo>(rclcpp::MessageInfo({settings_.sensor_name}));
+    std::vector<std::string> sensor_names;
+    sensor_names.push_back(settings_.sensor_name);
+    auto message_info = std::make_unique<rclcpp::MessageInfo>(sensor_names);
     auto policy = source_tp_->update_sample_time(message_info->get_TP_Info(settings_.sensor_name));
     set_sample(
       this->get_name(), sequence_number_++, 0, source_tp_->get_last_sample_time(),

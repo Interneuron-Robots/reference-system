@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sauron
  * @Date: 2023-04-06 14:23:58
- * @LastEditTime: 2023-07-26 14:28:44
+ * @LastEditTime: 2023-08-10 14:42:33
  * @LastEditors: Sauron
  */
 // Copyright 2021 Apex.AI, Inc.
@@ -105,6 +105,7 @@ void input_callback(
       output_message);
 
     output_message.data[0] = number_cruncher_result;
+    TODO:
     publisher_->publish(std::move(output_message));
 
     subscriptions_[0].cache.reset();
