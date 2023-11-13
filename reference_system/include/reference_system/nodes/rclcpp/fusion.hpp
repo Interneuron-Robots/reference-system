@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sauron
  * @Date: 2023-04-06 14:23:58
- * @LastEditTime: 2023-08-10 14:42:33
+ * @LastEditTime: 2023-08-29 22:31:41
  * @LastEditors: Sauron
  */
 // Copyright 2021 Apex.AI, Inc.
@@ -52,10 +52,10 @@ public:
       settings.input_1, 1,
       [this](const message_t::SharedPtr msg, const rclcpp::MessageInfo&msg_info) {input_callback(1U, msg, msg_info);});
 
-interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[0].subscription->get_key_tp()+"_sub",settings.input_0_sensor_names);
-interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[1].subscription->get_key_tp()+"_sub",settings.input_1_sensor_names);
-      start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(subscriptions_[0].subscription->get_key_tp()+"_app",settings.output_sensor_names);//we only need one start timepoint, and we use the first subscriber's key, it's ok to use any unique string defined in settings
-      end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(publisher_->get_key_tp()+"_pub",settings.output_sensor_names);
+interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(subscriptions_[0].subscription->get_intra_id())+"_sub",settings.input_0_sensor_names);
+interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(subscriptions_[1].subscription->get_intra_id())+"_sub",settings.input_1_sensor_names);
+      start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(subscriptions_[0].subscription->get_intra_id())+"_app",settings.output_sensor_names);//we only need one start timepoint, and we use the first subscriber's key, it's ok to use any unique string defined in settings
+      end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(publisher_->get_intra_id())+"_pub",settings.output_sensor_names);
     #else
     subscriptions_[0].subscription = this->create_subscription<message_t>(
       settings.input_0, 1,

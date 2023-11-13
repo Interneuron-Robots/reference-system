@@ -53,9 +53,9 @@ public:
               }),
             callback_group,
             connection.number_crunch_limit});
-      interneuron::TimePointManager::getInstance().add_middle_timepoint(connections_[index].subscription->get_key_tp()+"_sub",settings.connections[index].input_sensor_names);
-      connections_[index].start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(connections_[index].subscription->get_key_tp()+"_app",settings.connections[index].input_sensor_names);
-      connections_[index].end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(connections_[index].publisher->get_key_tp()+"_pub",settings.connections[index].output_sensor_names);
+      interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(connections_[index].subscription->get_intra_id())+"_sub",settings.connections[index].input_sensor_names);
+      connections_[index].start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(connections_[index].subscription->get_intra_id())+"_app",settings.connections[index].input_sensor_names);
+      connections_[index].end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(connections_[index].publisher->get_intra_id())+"_pub",settings.connections[index].output_sensor_names);
       #else
       connections_.emplace_back(
         Connection{

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sauron
  * @Date: 2023-04-06 14:23:58
- * @LastEditTime: 2023-07-19 23:25:49
+ * @LastEditTime: 2023-08-29 22:34:15
  * @LastEditors: Sauron
  */
 // Copyright 2021 Apex.AI, Inc.
@@ -49,9 +49,9 @@ public:
     subscription_ = this->create_subscription<message_t>(
       settings.input_topic, 1,
       [this](const message_t::SharedPtr msg, const rclcpp::MessageInfo&msg_info) {input_callback(msg, msg_info);});
-      interneuron::TimePointManager::getInstance().add_middle_timepoint(subscription_->get_key_tp()+"_sub",settings.sensor_names);
-      start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(subscription_->get_key_tp()+"_app",settings.sensor_names);
-      end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(publisher_->get_key_tp()+"_pub",settings.sensor_names);
+      interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(subscription_->get_intra_id())+"_sub",settings.sensor_names);
+      start_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(subscription_->get_intra_id())+"_app",settings.sensor_names);
+      end_tp_ = interneuron::TimePointManager::getInstance().add_middle_timepoint(std::to_string(publisher_->get_intra_id())+"_pub",settings.sensor_names);
     #else
     subscription_ = this->create_subscription<message_t>(
       settings.input_topic, 1,
